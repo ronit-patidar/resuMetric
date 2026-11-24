@@ -118,18 +118,6 @@ $severity-low:    #3fb950;
     }
 }
 
-.download-btn-header {
-    white-space: nowrap;
-    font-size: 0.85rem;
-    padding: 0.45rem 0.95rem;
-    min-height: 2.25rem;
-    border-radius: 0.55rem;
-
-    svg {
-        flex-shrink: 0;
-    }
-}
-
 // ── 3-Column Layout ───────────────────────────────────────────────────────────
 .interview-layout {
     display: flex;
@@ -796,10 +784,6 @@ $severity-low:    #3fb950;
 
     .back-btn span {
         display: none;
-    }
-
-    .download-btn-header span {
-        font-size: 0.8rem;
     }
 
     .interview-content {

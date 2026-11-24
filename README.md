@@ -2,6 +2,8 @@
 
 resuMetric is a full-stack interview preparation app that analyzes a job description and a candidate profile to create a personalized interview strategy.
 
+Live app: [https://resu-metric-ten.vercel.app](https://resu-metric-ten.vercel.app)
+
 ## Features
 
 - User registration, login, logout, and protected routes
@@ -9,7 +11,6 @@ resuMetric is a full-stack interview preparation app that analyzes a job descrip
 - AI-generated technical and behavioral interview questions
 - Match score and identified skill gaps
 - Day-by-day preparation roadmap
-- Download an optimized resume as a PDF
 - Saved interview plans for each user
 
 ## Tech stack
@@ -91,7 +92,7 @@ Then open [http://localhost:5173](http://localhost:5173). The API runs on [http:
 2. Create a MongoDB Atlas cluster and a database user. Copy the application's MongoDB connection string; use it for `MONGO_URI` on Render. Add the Render service's outbound IP ranges to the Atlas IP access list after creating the Render service.
 3. Create a Render Web Service from this repository with root directory `Backend`, build command `npm ci`, and start command `npm start`. Set `NODE_VERSION` to `24.22.1` (the backend also supports Node 22).
 4. Add these Render environment variables: `NODE_ENV=production`, `MONGO_URI`, `JWT_SECRET`, `GOOGLE_GENAI_API_KEY`, and `GEMINI_MODEL=gemini-3.5-flash`. Set Render's health check path to `/health`.
-5. After Render deploys, copy its service URL into the API rewrite destination in `Frontend/vercel.json` (replace `YOUR-RENDER-SERVICE`).
+5. `Frontend/vercel.json` proxies API requests to `https://resumetric-i9mb.onrender.com`. If you deploy your own backend, replace that destination with your Render service URL.
 6. Create a Vercel project from the same repository with root directory `Frontend`. Use the Vite defaults (`npm run build`, output directory `dist`). Leave `VITE_API_URL` unset in Vercel; production requests use the same-origin `/api` rewrite.
 7. Once Vercel gives you the production URL, set that exact origin as Render's `FRONTEND_URL` and redeploy the backend.
 
@@ -122,10 +123,9 @@ npm run dev      # Start the API with Nodemon
 | `POST` | `/api/auth/login` | Sign in |
 | `GET` | `/api/auth/get-me` | Get the current user |
 | `GET` | `/api/auth/logout` | Sign out |
-| `POST` | `/api/interview/` | Generate an interview plan |
-| `GET` | `/api/interview/` | List saved plans |
+| `POST` | `/api/interview` | Generate an interview plan |
+| `GET` | `/api/interview` | List saved plans |
 | `GET` | `/api/interview/report/:interviewId` | Get a saved plan |
-| `POST` | `/api/interview/resume/pdf/:interviewReportId` | Download a tailored resume PDF |
 
 ## Notes
 

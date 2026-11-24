@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import '../style/interview.scss'
 import { useInterview } from '../hooks/useInterview.js'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { useAuth } from '../../auth/hooks/useAuth.js'
 
@@ -71,10 +71,8 @@ const RoadMapDay = ({ day }) => (
 // ── Main Component ────────────────────────────────────────────────────────────
 const Interview = () => {
     const [ activeNav, setActiveNav ] = useState('technical')
-    const [ isDownloading, setIsDownloading ] = useState(false)
-    const { report, loading, getResumePdf } = useInterview()
+    const { report, loading } = useInterview()
     const { handleLogout } = useAuth()
-    const { interviewId } = useParams()
     const navigate = useNavigate()
 
     const handleLogoutClick = async () => {
@@ -84,31 +82,6 @@ const Interview = () => {
             navigate('/login', { replace: true })
         } else {
             toast.error(result?.message || 'Logout failed. Please try again.')
-        }
-    }
-
-    const handleDownloadResume = async () => {
-        if (!interviewId) return
-        setIsDownloading(true)
-        const toastId = toast.loading("Generating your optimized resume PDF...")
-
-        const result = await getResumePdf(interviewId)
-        setIsDownloading(false)
-
-        if (result?.success) {
-            toast.update(toastId, {
-                render: "Resume PDF downloaded successfully!",
-                type: "success",
-                isLoading: false,
-                autoClose: 3000
-            })
-        } else {
-            toast.update(toastId, {
-                render: result?.message || "Failed to download resume PDF. Please try again.",
-                type: "error",
-                isLoading: false,
-                autoClose: 4000
-            })
         }
     }
 
@@ -145,19 +118,6 @@ const Interview = () => {
                 </div>
 
                 <div className='interview-topbar__actions'>
-                    <button
-                        onClick={handleDownloadResume}
-                        disabled={isDownloading}
-                        className='button primary-button download-btn-header'
-                        title="Download tailored resume PDF"
-                    >
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                        <span>{isDownloading ? "Downloading..." : "Download Resume"}</span>
-                    </button>
                     <button onClick={handleLogoutClick} className='logout-btn' title='Sign out'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
